@@ -248,7 +248,7 @@ class RedTech {
      *
      * @return boolean
      */
-	private function validate_form_data ($data, $fields) {
+	private function valid_form_data ($data, $fields) {
 		foreach ($fields AS $type => $field) {
 			if (empty(trim($data[$field]))) {
 				$this->error = "{$field} is required";				
@@ -304,7 +304,7 @@ class RedTech {
 		}
 		
 		//-- validate post data
-		if (!$this->validate_form_data($options, ['name', 'address'])) {
+		if (!$this->valid_form_data($options, ['name', 'address'])) {
 			return false;
 		}
 		
@@ -314,7 +314,7 @@ class RedTech {
 		
 		//-- add new Location
 		$this->locationData[] = [
-			//'id' => trim($options['name']),	//-- BETTER: RDB auto-increment value
+			//'id' => NULL,	//-- BETTER: RDB auto-increment value
 			'id' => max(array_column($this->locationData, 'id')) + 1, //-- FOR NOW: add 1 to highest locationid
 			'name' => trim($options['name']),
 			'address' => trim($options['address']),
@@ -343,7 +343,7 @@ class RedTech {
 		}
 		
 		//-- validate post data
-		if (!$this->validate_form_data($options, ['name', 'address', 'country'])) {
+		if (!$this->valid_form_data($options, ['name', 'address', 'country'])) {
 			return false;
 		}
 		
@@ -401,7 +401,7 @@ class RedTech {
 		$this->get_floors($options['locationid']);
 		
 		//-- validate post data
-		if (!$this->validate_form_data($options, ['description', 'intv'=>'number', 'intv'=>'desks'])) {
+		if (!$this->valid_form_data($options, ['description', 'intv'=>'number', 'intv'=>'desks'])) {
 			return false;
 		}
 		
@@ -415,11 +415,11 @@ class RedTech {
 		$key = $this->get_location_key($options['locationid']);
 		
 		//-- floor id
-		$floorid = empty($this->locationFloors) ? 1 : max(array_column($this->locationFloors, 'id')) + 1;
+		$floorid = empty($this->locationFloors) ? $options['locationid'].'1' : max(array_column($this->locationFloors, 'id')) + 1;
 		
 		//-- add floor data
 		$this->locationData[$key]['floor'][] = [
-			'id' => $floorid,
+			'id' => intval($floorid),
 			'number' => intval($options['number']),
 			'description' => trim($options['description']),
 			'desks' => intval($options['desks']),
@@ -450,7 +450,7 @@ class RedTech {
 		}
 		
 		//-- validate post data
-		if (!$this->validate_form_data($options, ['description', 'int'=>'number', 'int'=>'desks'])) {
+		if (!$this->valid_form_data($options, ['description', 'int'=>'number', 'int'=>'desks'])) {
 			return false;
 		}
 		
