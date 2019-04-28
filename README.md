@@ -1,7 +1,7 @@
 # code
 -- php code challenge --
 
-$class = new Location();
+$class = new RedTech();
 
 -- create location\
 $response = $class->create_location(['name'=>'charles', 'address'=>'bay area', 'country'=>'US']);
